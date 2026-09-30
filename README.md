@@ -23,6 +23,15 @@ Corpus I picked: campus_life
 
 ## What This Does
 
+This is a question-answering system over `campus_life`: 88 short posts written
+by students about life at one university - dining halls, dorms, courses, and
+the administrative rules nobody explains properly. You ask it a question in
+plain English, like "how are seniors ordered in the housing lottery?" or "how
+long is the lunch queue at Kestrel Commons?", and it finds the most relevant
+posts and answers from them, naming the file it used. If nothing in the posts is
+close enough to the question, it says "I don't have enough information about
+that" rather than guessing.
+
 <!-- Three or four sentences. Which corpus you picked, and the kinds of
      questions your system answers. Write it for someone who has never seen
      this repo.
@@ -194,9 +203,25 @@ misses depend on the prompt.
 
      Milestone 5. -->
 
-**1.**
+**1.** I asked Claude to read through all 88 `campus_life` posts and suggest
+five test questions with `expects` phrases. It came back with five questions —
+including "How much does laundry cost in Morrow House?" with `expects: "$1.50"`,
+which it flagged as the hardest because the seven laundry posts are nearly
+identical — plus a spare question about withdrawing after week six. I swapped
+the Morrow House laundry question out for the withdrawal one, because
+withdrawing from a course after week six is something a student would actually
+need to ask, while a single building's laundry price felt like a question
+nobody would really type into a campus guide.
 
-**2.**
+**2.** I asked Claude to write the chunker we'd agreed on: one chunk per
+paragraph, with the post's title copied onto each. It replaced the body of
+`split_documents`, and `fallback_split` was no longer called anywhere in the
+pipeline. That looked to me like it hadn't actually replaced the starter's
+chunker, so I pushed back and checked it against the Milestone 3 instructions
+before accepting it. It turned out to be right — the starter's own comments say
+to replace the body of `split_documents` and keep `fallback_split` for the stop
+rule, so I kept the code as it was, but only after confirming that the function
+my README names is the one that produced my chunks.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
