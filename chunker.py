@@ -96,8 +96,38 @@ def split_documents(documents: list[Document]) -> list[Chunk]:
       - Is the useful information in one sentence, or spread over a paragraph?
       - Would splitting on paragraph breaks keep more thoughts intact than
         splitting on a character count?
+
+    My strategy: one chunk per body paragraph, with the document's title line
+    put back at the top of every chunk. campus_life posts are a title plus one
+    to four short paragraphs, and each paragraph holds one thought (e.g. a
+    dining hall's wait times in one, its hours and price in the next). The
+    title is the only place many near-identical posts differ — seven laundry
+    posts say the same thing apart from the building name — so a chunk without
+    it can't be told apart from its neighbours. No overlap: paragraph breaks
+    never cut a sentence, and the repeated title carries the context.
     """
-    return fallback_split(documents)
+    chunks: list[Chunk] = []
+    for doc in documents:
+        paragraphs = [p.strip() for p in doc.text.split("\n\n") if p.strip()]
+        if not paragraphs:
+            continue
+
+        title, body = paragraphs[0], paragraphs[1:]
+        # A document with no body is just its title — keep it as one chunk
+        # rather than dropping it.
+        pieces = [f"{title}\n\n{p}" for p in body] or [title]
+
+        for index, piece in enumerate(pieces):
+            chunks.append(
+                Chunk(
+                    text=piece,
+                    source=doc.source,
+                    index=index,
+                    produced_by="chunker.py::split_documents",
+                )
+            )
+
+    return chunks
 
 
 def describe(chunks: list[Chunk]) -> str:

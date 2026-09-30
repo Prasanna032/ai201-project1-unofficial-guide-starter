@@ -31,8 +31,34 @@ Corpus I picked: campus_life
 
 ## Chunking Strategy
 
-**Chunk size:**
-**Overlap:**
+**Chunk size:** no fixed character count — one chunk per paragraph, with the
+document's title line copied onto the top of each. On `campus_life` that gives
+183 chunks, 63–397 characters, 167 on average.
+
+**Overlap:** 0
+
+The `campus_life` posts are short — 178 to 549 characters — and every one is a
+title line followed by one to four paragraphs. The starter's 800-character
+windows never split anything (88 documents became 88 chunks), so the real
+question was whether one post should stay one chunk.
+
+I considered keeping it that way, since each post is mostly about one subject.
+What decided it was reading the posts that hold two separate thoughts:
+`dining_halden_hall.txt` has wait times and what's worth eating in one
+paragraph, and hours and price in the other. As a single chunk, a question
+about Halden's closing time has to match text that's half about soup. Split on
+the paragraph break, each piece is one thought.
+
+Splitting on its own caused a second problem, which is why every chunk carries
+its title. Many posts are near-duplicates: the seven laundry posts are word for
+word the same apart from the building name, prices and payment method, and the building name
+only appears in the title. A paragraph like "Machines take $2.00 wash, $1.75
+dry" with no title can't be tied to any building, and retrieval can't tell it
+from the other six. With the title copied on, every chunk says what it's about.
+
+No overlap, because overlap exists to rescue a sentence cut in half, and
+splitting on paragraph breaks never cuts a sentence. The repeated title already
+carries the context overlap would have.
 
 <!-- What about YOUR documents made you pick these numbers? Short posts and
      long sectioned guides don't want the same chunking, and "800 seemed
@@ -55,29 +81,44 @@ Corpus I picked: campus_life
 
      Milestone 3. -->
 
-**Chunk 1** — source: `` — produced by: ``
+**Chunk 1** — source: `admin_add_drop_deadline.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+On the add/drop deadline
+
+You can add a course through the end of the second week. Dropping is a longer window — through the end of week six — but a drop after week two shows as a W on your transcript. Nothing anywhere on the registrar's site says this plainly, and students find out from each other.
 ```
 
-**Chunk 2** — source: `` — produced by: ``
+**Chunk 2** — source: `course_cs_340_exams.txt#1` — produced by: `chunker.py::split_documents`
 
 ```
+CS 340 Databases — assessment
+
+Start the term project in week three, not week eight; everyone learns this the hard way.
 ```
 
-**Chunk 3** — source: `` — produced by: ``
+**Chunk 3** — source: `course_phys_130_workload.txt#0` — produced by: `chunker.py::split_documents`
 
 ```
+Workload for PHYS 130 Mechanics
+
+People keep asking so: 7 hours a week, plus 3 on lab weeks. That's real time, not optimistic time.
 ```
 
-**Chunk 4** — source: `` — produced by: ``
+**Chunk 4** — source: `dining_verrill_street_grill_followup.txt#1` — produced by: `chunker.py::split_documents`
 
 ```
+Re: Verrill Street Grill
+
+Also worth saying: one register, so the queue is a single line no matter how busy. Nobody tells you this at orientation.
 ```
 
-**Chunk 5** — source: `` — produced by: ``
+**Chunk 5** — source: `housing_morrow_house.txt#1` — produced by: `chunker.py::split_documents`
 
 ```
+Morrow House — what it's actually like
+
+The good: cheapest housing tier by about $900 a year, and the singles are real singles.
 ```
 
 ## Sample Answer
