@@ -23,8 +23,7 @@ For at least 4 of my 5 test questions, the retrieved chunks include one that
 contains the answer.
 
 **Why this target:**
-<!-- e.g. "One of my questions is about a topic only two documents mention, so
-     I expect that one to be hard." -->
+Each answer sits in one short post on a single topic, so I expect retrieval to find most of them. I'm allowing one miss because the Kestrel Commons question has to compete with six other dining posts that use the exact same 'Wait times: …' wording, and only the hall's name tells them apart.
 
 ---
 
@@ -33,8 +32,7 @@ contains the answer.
 Every answer the system produces names at least one source document.
 
 **Why this target:**
-<!-- Why all five and not four? What about your setup makes that achievable —
-     or what would have to go wrong for it not to be? -->
+The grounding instruction tells the model to name the file, and every file name says what it's about. The only way this fails is if the model ignores the instruction, and that's exactly what I want to catch.
 
 ---
 
@@ -50,47 +48,30 @@ in at least 4 of 5 tries.
      just keep five of them, or the "4 of 5" above has nothing to be 4 of. -->
 
 **Why this target:**
-<!-- What did your distances look like when you set the cutoff in Milestone 4?
-     Was there a clean gap, or did the two groups overlap? -->
+We have a 0.6 cutoff, and the out-of-scope questions come from completely different subjects, so I expect a clear gap. I'm allowing one miss for the ibuprofen question, since health_center.txt is the closest thing in my corpus to a medical question.
 
 ---
 
 ## 4. Something about your chunks
 
-<!-- YOU WRITE THIS ONE.
-
-     How would you know if your chunks were the right size? Name something
-     countable or observable.
-
-     Examples of the right shape — don't copy these, they should come from
-     what you actually saw in Milestone 3:
-       - "At least 4 of 5 sampled chunks read as a complete thought, with no
-          sentence cut in half at either end."
-       - "No chunk is shorter than 200 characters, since anything below that
-          in my corpus turned out to be a heading with no content under it." -->
+Every one of the 5 chunks printed by python app.py chunks -n 5 names the building, dining hall, course, or office it describes.
 
 
 
 **Why this target:**
-
+21 of my documents are near-duplicates: the laundry, noise and dining posts differ only in the name and the numbers. If my chunker splits off the title line, a chunk like '$2.00 wash, $1.75 dry' can't be attributed to any building, and retrieval can't tell it apart from the other six.
 
 
 ---
 
 ## 5. Your choice
 
-<!-- YOU WRITE THIS ONE TOO.
-
-     Pick something you actually care about getting right. It could be about
-     speed, about refusals, about a particular kind of question your corpus
-     handles badly, about source attribution being correct rather than merely
-     present — anything, as long as it names a number or an observable
-     outcome. -->
+At least 4 of my 5 answers contain their expects phrase from questions.py, in each of the three runs.
 
 
 
 **Why this target:**
-
+Criteria 1 and 2 only check that the right material came back and that a source was named. Neither checks that the answer is actually correct. I wrote the expects phrases before seeing any results, so this checks correctness against a standard I couldn't adjust afterwards.
 
 
 ---
