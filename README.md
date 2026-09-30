@@ -31,13 +31,13 @@ Corpus I picked: campus_life
 
 ## Chunking Strategy
 
-**Chunk size:** no fixed character count — one chunk per paragraph, with the
+**Chunk size:** no fixed character count, one chunk per paragraph, with the
 document's title line copied onto the top of each. On `campus_life` that gives
 183 chunks, 63–397 characters, 167 on average.
 
 **Overlap:** 0
 
-The `campus_life` posts are short — 178 to 549 characters — and every one is a
+The `campus_life` posts are short, 178 to 549 characters,  and every one is a
 title line followed by one to four paragraphs. The starter's 800-character
 windows never split anything (88 documents became 88 chunks), so the real
 question was whether one post should stay one chunk.
@@ -126,14 +126,40 @@ The good: cheapest housing tier by about $900 a year, and the singles are real s
 <!-- One complete question and answer, pasted as text, with the source line
      visible. Milestone 4. -->
 
-**Question:**
+**Question:** What do I need to withdraw from a course after week six?
 
 **Answer:**
 
 ```
+$ python app.py ask "What do I need to withdraw from a course after week six?"
+  (best distance 0.514, cutoff 0.7)
+
+To withdraw from a course after week six, you need an adviser's signature (admin_withdrawal_deadline.txt).
+
+Sources retrieved: admin_add_drop_deadline.txt, admin_graduation_requirements.txt, admin_pass_fail_option.txt, admin_withdrawal_deadline.txt, advising_registration.txt
 ```
 
-**My relevance cutoff:**
+**My relevance cutoff:** 0.70
+
+My five in-corpus questions scored between 0.173 and 0.593; the five
+`OUT_OF_SCOPE` questions scored between 0.787 and 0.923. That's a clean gap from
+0.593 to 0.787, and 0.70 sits roughly in the middle of it, about 0.1 from each
+side.
+
+I moved it off the starter's 0.6 because the shuttle question scored 0.593 —
+it only got through by 0.007, and a slightly different wording would have been
+refused even though the answer is in the corpus. Going higher than 0.70 would
+put the cutoff within 0.09 of the Mongolia question (0.787).
+
+Two things I didn't expect. First, I guessed the ibuprofen question would land
+close to `health_center.txt`; it scored 0.849 and the health centre post
+wasn't even in its top five. Second, a campus-sounding question the corpus
+doesn't cover — "What time does the campus gym open?" — scored 0.421, lower
+than two of my real questions, so the gate let it through. The grounding
+instruction caught it instead: the model answered "I don't have enough
+information to answer your question, as the provided documents do not mention
+the campus gym." The gate only stops questions from a different world; near
+misses depend on the prompt.
 
 <!-- The number you set in config.py, and how you got there.
 
@@ -146,7 +172,16 @@ The good: cheapest housing tier by about $900 a year, and the singles are real s
 
 | Question | In corpus? | Best distance |
 |---|---|---|
-|  |  |  |
+| How long is the wait at Kestrel Commons between 12:15 and 1:00? | Yes | 0.173 |
+| How are juniors and seniors ordered in the housing lottery? | Yes | 0.225 |
+| What grade do I need to get a pass in a course taken pass/fail? | Yes | 0.327 |
+| What do I need to withdraw from a course after week six? | Yes | 0.514 |
+| Which shuttle stop gets skipped when the driver is running behind? | Yes | 0.593 |
+| What is the capital of Mongolia? | No | 0.787 |
+| Who won the 1994 World Cup? | No | 0.847 |
+| What is the recommended dosage of ibuprofen for a headache? | No | 0.849 |
+| How do I write a for loop in Rust? | No | 0.860 |
+| How do I change the oil in a diesel engine? | No | 0.923 |
 
 ## How I Used AI
 
